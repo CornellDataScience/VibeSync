@@ -1,7 +1,7 @@
 from msclap import CLAP
 
 
-audio_files = ["List of audio files"]
+audio_files = ["Audio/symphony_no_5_in_c_minor.mp3"]
 
 clap_model = CLAP(version = 'clapcap', use_cuda=False)
 

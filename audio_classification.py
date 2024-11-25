@@ -5,7 +5,7 @@ import torch.nn.functional as F
 clap_model = CLAP(version = '2023', use_cuda=False)
 
 classes = ["anime song", "pop song", "hip hop", "classical"]
-audio_files = ["List of audio files"]
+audio_files = ["Audio/symphony_no_5_in_c_minor.mp3"]
 
 # Extract text embeddings
 text_embeddings = clap_model.get_text_embeddings(classes)
