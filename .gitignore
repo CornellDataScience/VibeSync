@@ -1,0 +1,8 @@
+# Byte-compiled files and __pycache__
+__pycache__/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Log files
+*.log
