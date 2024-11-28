@@ -1,0 +1,68 @@
+Experiment Configuration:
+Audio Directory: Audio
+Postprocessing Method: raw
+Top K: 5
+
+Text Query: happy
+Similarity Method: cosine_similarity
+Top 5 Songs:
+  1. alan_walker_faded (Similarity: 0.21)
+  2. frozen_let_it_go (Similarity: 0.19)
+  3. tangled_i_see_the_light (Similarity: 0.17)
+  4. despacito (Similarity: 0.16)
+  5. drake_gods_plan (Similarity: 0.16)
+
+Text Query: happy
+Similarity Method: euclidean_distance
+Top 5 Songs:
+  1. alan_walker_faded (Similarity: -41.29)
+  2. frozen_let_it_go (Similarity: -41.82)
+  3. tangled_i_see_the_light (Similarity: -42.31)
+  4. despacito (Similarity: -42.39)
+  5. drake_gods_plan (Similarity: -42.62)
+
+Text Query: happy
+Similarity Method: manhattan_distance
+Top 5 Songs:
+  1. alan_walker_faded (Similarity: -1004.57)
+  2. despacito (Similarity: -1034.75)
+  3. frozen_let_it_go (Similarity: -1039.02)
+  4. glimpse_of_us (Similarity: -1039.82)
+  5. cruel_angels_thesis (Similarity: -1040.10)
+
+Text Query: happy
+Similarity Method: jaccard_similarity
+Top 5 Songs:
+  1. frozen_let_it_go (Similarity: 0.44)
+  2. tangled_i_see_the_light (Similarity: 0.44)
+  3. alan_walker_faded (Similarity: 0.44)
+  4. despacito (Similarity: 0.43)
+  5. cruel_angels_thesis (Similarity: 0.43)
+
+Text Query: happy
+Similarity Method: kl_divergence
+Top 5 Songs:
+  1. alan_walker_faded (Similarity: -0.63)
+  2. drake_gods_plan (Similarity: -0.64)
+  3. despacito (Similarity: -0.66)
+  4. frozen_let_it_go (Similarity: -0.67)
+  5. cruel_angels_thesis (Similarity: -0.67)
+
+Text Query: happy
+Similarity Method: pearson_correlation
+Top 5 Songs:
+  1. alan_walker_faded (Similarity: 0.21)
+  2. frozen_let_it_go (Similarity: 0.19)
+  3. tangled_i_see_the_light (Similarity: 0.17)
+  4. despacito (Similarity: 0.16)
+  5. drake_gods_plan (Similarity: 0.16)
+
+Text Query: happy
+Original Compute Similarity Results:
+Top 5 Songs:
+  1. alan_walker_faded (Similarity: 6.93)
+  2. frozen_let_it_go (Similarity: 6.21)
+  3. tangled_i_see_the_light (Similarity: 5.56)
+  4. despacito (Similarity: 5.47)
+  5. drake_gods_plan (Similarity: 5.25)
+

@@ -1,0 +1,113 @@
+Experiment Configuration:
+Audio Directory: Audio
+Postprocessing Method: raw
+Top K: 5
+
+Text Query: happy
+Similarity Method: kl_divergence
+Top 5 Songs:
+  1. frozen_let_it_go (Similarity: -0.62)
+  2. drake_gods_plan (Similarity: -0.64)
+  3. alan_walker_faded (Similarity: -0.66)
+  4. yuuri_dried_flower (Similarity: -0.67)
+  5. aespa_supernova (Similarity: -0.69)
+
+Text Query: happy
+Original Compute Similarity Results:
+Top 5 Songs:
+  1. drake_gods_plan (Similarity: 7.30)
+  2. alan_walker_faded (Similarity: 7.11)
+  3. frozen_let_it_go (Similarity: 6.39)
+  4. yuuri_dried_flower (Similarity: 5.98)
+  5. all_i_want_for_christmas_is_you (Similarity: 5.63)
+
+Text Query: joy
+Similarity Method: kl_divergence
+Top 5 Songs:
+  1. drake_gods_plan (Similarity: -0.66)
+  2. frozen_let_it_go (Similarity: -0.68)
+  3. taylor_swift_love_story (Similarity: -0.68)
+  4. aespa_supernova (Similarity: -0.69)
+  5. adele_someone_like_you (Similarity: -0.70)
+
+Text Query: joy
+Original Compute Similarity Results:
+Top 5 Songs:
+  1. drake_gods_plan (Similarity: 8.67)
+  2. glimpse_of_us (Similarity: 7.20)
+  3. tangled_i_see_the_light (Similarity: 7.15)
+  4. all_i_want_for_christmas_is_you (Similarity: 6.67)
+  5. yuuri_dried_flower (Similarity: 6.33)
+
+Text Query: cheerful
+Similarity Method: kl_divergence
+Top 5 Songs:
+  1. drake_gods_plan (Similarity: -0.62)
+  2. frozen_let_it_go (Similarity: -0.65)
+  3. stay_with_me (Similarity: -0.73)
+  4. all_i_want_for_christmas_is_you (Similarity: -0.73)
+  5. yuuri_dried_flower (Similarity: -0.74)
+
+Text Query: cheerful
+Original Compute Similarity Results:
+Top 5 Songs:
+  1. drake_gods_plan (Similarity: 8.80)
+  2. frozen_let_it_go (Similarity: 6.35)
+  3. all_i_want_for_christmas_is_you (Similarity: 5.41)
+  4. glimpse_of_us (Similarity: 5.26)
+  5. alan_walker_faded (Similarity: 5.02)
+
+Text Query: merry
+Similarity Method: kl_divergence
+Top 5 Songs:
+  1. drake_gods_plan (Similarity: -0.58)
+  2. frozen_let_it_go (Similarity: -0.67)
+  3. yuuri_dried_flower (Similarity: -0.67)
+  4. glimpse_of_us (Similarity: -0.70)
+  5. all_i_want_for_christmas_is_you (Similarity: -0.72)
+
+Text Query: merry
+Original Compute Similarity Results:
+Top 5 Songs:
+  1. drake_gods_plan (Similarity: 10.20)
+  2. glimpse_of_us (Similarity: 6.94)
+  3. yuuri_dried_flower (Similarity: 5.90)
+  4. all_i_want_for_christmas_is_you (Similarity: 5.53)
+  5. frozen_let_it_go (Similarity: 5.51)
+
+Text Query: bright
+Similarity Method: kl_divergence
+Top 5 Songs:
+  1. frozen_let_it_go (Similarity: -0.66)
+  2. drake_gods_plan (Similarity: -0.66)
+  3. yuuri_dried_flower (Similarity: -0.72)
+  4. alan_walker_faded (Similarity: -0.72)
+  5. glimpse_of_us (Similarity: -0.73)
+
+Text Query: bright
+Original Compute Similarity Results:
+Top 5 Songs:
+  1. drake_gods_plan (Similarity: 7.77)
+  2. glimpse_of_us (Similarity: 6.29)
+  3. alan_walker_faded (Similarity: 6.25)
+  4. yuuri_dried_flower (Similarity: 5.96)
+  5. frozen_let_it_go (Similarity: 5.91)
+
+Text Query: high spirits
+Similarity Method: kl_divergence
+Top 5 Songs:
+  1. frozen_let_it_go (Similarity: -0.68)
+  2. drake_gods_plan (Similarity: -0.68)
+  3. yuuri_dried_flower (Similarity: -0.75)
+  4. ghost_riders_in_the_sky (Similarity: -0.78)
+  5. all_i_want_for_christmas_is_you (Similarity: -0.78)
+
+Text Query: high spirits
+Original Compute Similarity Results:
+Top 5 Songs:
+  1. drake_gods_plan (Similarity: 7.59)
+  2. frozen_let_it_go (Similarity: 6.24)
+  3. yuuri_dried_flower (Similarity: 5.43)
+  4. all_i_want_for_christmas_is_you (Similarity: 4.71)
+  5. ghost_riders_in_the_sky (Similarity: 4.27)
+

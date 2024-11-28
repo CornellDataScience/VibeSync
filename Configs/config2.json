@@ -1,29 +1,16 @@
 {
-  "audio_files": [
-    "Audio/adele_someone_like_you.mp3",
-    "Audio/aespa_supernova.mp3",
-    "Audio/alan_walker_faded.mp3",
-    "Audio/all_i_want_for_christmas_is_you.mp3",
-    "Audio/bang_bang_bang.mp3",
-    "Audio/bohemian_rhapsody.mp3",
-    "Audio/bruno_mars_thats_what_i_like.mp3",
-    "Audio/cruel_angels_thesis.mp3",
-    "Audio/despacito.mp3",
-    "Audio/drake_gods_plan.mp3",
-    "Audio/frozen_let_it_go.mp3",
-    "Audio/ghost_riders_in_the_sky.mp3",
-    "Audio/glimpse_of_us.mp3",
-    "Audio/its_beginning_to_look_a_lot_like_christmas.mp3",
-    "Audio/kendrick_lamar_not_like_us.mp3",
-    "Audio/moonlight_sonata.mp3",
-    "Audio/stay_with_me.mp3",
-    "Audio/symphony_no_5_in_c_minor.mp3",
-    "Audio/tangled_i_see_the_light.mp3",
-    "Audio/taylor_swift_love_story.mp3",
-    "Audio/yuuri_dried_flower.mp3"
+  "audio_directory": "Audio",
+  "text_query": [
+    "happy",
+    "joy",
+    "cheerful",
+    "merry",
+    "bright",
+    "high spirits"
   ],
-  "similarity_method": "manhattan_distance",
+  "similarity_methods": "kl_divergence",
   "postprocessing_method": "raw",
-  "text_query": "sad",
-  "top_k": 5
+  "top_k": 5,
+  "save_to": "Experiment/similarity_results2.txt",
+  "include_original": true
 }

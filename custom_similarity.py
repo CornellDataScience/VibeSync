@@ -56,10 +56,21 @@ class CustomSimilarity:
 
     @staticmethod
     def kl_divergence(embeddings_a, embeddings_b):
-        embeddings_a = F.softmax(embeddings_a, dim=-1)
-        embeddings_b = F.softmax(embeddings_b, dim=-1)
-        kl = F.kl_div(embeddings_a.log(), embeddings_b, reduction="none")
-        return -kl.sum(dim=-1)
+        eps = 1e-10  # Small value to avoid log(0)
+        embeddings_a = F.softmax(embeddings_a, dim=-1) + eps
+        embeddings_b = F.softmax(embeddings_b, dim=-1) + eps
+
+        embeddings_a_log = embeddings_a.log()
+        embeddings_b_log = embeddings_b.log()
+
+        embeddings_a = embeddings_a.unsqueeze(1)
+        embeddings_a_log = embeddings_a_log.unsqueeze(1)
+
+        embeddings_b = embeddings_b.unsqueeze(0)
+        embeddings_b_log = embeddings_b_log.unsqueeze(0)
+
+        kl_div = (embeddings_a * (embeddings_a_log - embeddings_b_log)).sum(dim=-1)
+        return -kl_div
 
     @staticmethod
     def pearson_correlation(embeddings_a, embeddings_b):
