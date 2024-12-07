@@ -7,6 +7,11 @@ First, install python 3.8 or higher (3.11 recommended). Then, install CLAP using
 ```shell
 pip install msclap
 ```
+Second, create a `.env` file in the root directory of the project and add the following environment variables (filled with valid credentials):
+```
+CHROME_USER=<put your email here>
+CHROME_PASSWORD=<put your password here>
+```
 
 ## Usage
 
