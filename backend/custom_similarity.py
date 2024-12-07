@@ -2,11 +2,10 @@ import torch
 import torch.nn.functional as F
 from scipy.stats import pearsonr
 from scipy.spatial.distance import mahalanobis
-from utility import *
 
 
 class CustomSimilarity:
-    
+
     def __init__(self, method="cosine_similarity", postprocessing="raw"):
         self.method = method
         self.postprocessing = postprocessing
@@ -26,20 +25,22 @@ class CustomSimilarity:
             similarities = self.pearson_correlation(embeddings_a, embeddings_b)
         else:
             raise ValueError(f"Unknown similarity method: {self.method}")
-        
+
         return self.postprocess(similarities)
 
     @staticmethod
     def cosine_similarity(embeddings_a, embeddings_b):
-        embeddings_a = embeddings_a / torch.norm(embeddings_a, dim=-1, keepdim=True)
-        embeddings_b = embeddings_b / torch.norm(embeddings_b, dim=-1, keepdim=True)
+        embeddings_a = embeddings_a / \
+            torch.norm(embeddings_a, dim=-1, keepdim=True)
+        embeddings_b = embeddings_b / \
+            torch.norm(embeddings_b, dim=-1, keepdim=True)
         return embeddings_a @ embeddings_b.T
 
     @staticmethod
     def euclidean_distance(embeddings_a, embeddings_b):
         distances = torch.cdist(embeddings_a, embeddings_b, p=2)
         return -distances
-    
+
     @staticmethod
     def manhattan_distance(embeddings_a, embeddings_b):
         distances = torch.cdist(embeddings_a, embeddings_b, p=1)
@@ -50,7 +51,8 @@ class CustomSimilarity:
         embeddings_a = embeddings_a > 0
         embeddings_b = embeddings_b > 0
 
-        intersection = torch.sum(embeddings_a & embeddings_b, dim=-1, keepdim=True)
+        intersection = torch.sum(
+            embeddings_a & embeddings_b, dim=-1, keepdim=True)
         union = torch.sum(embeddings_a | embeddings_b, dim=-1, keepdim=True)
         return intersection / union
 
@@ -69,17 +71,19 @@ class CustomSimilarity:
         embeddings_b = embeddings_b.unsqueeze(0)
         embeddings_b_log = embeddings_b_log.unsqueeze(0)
 
-        kl_div = (embeddings_a * (embeddings_a_log - embeddings_b_log)).sum(dim=-1)
+        kl_div = (embeddings_a * (embeddings_a_log -
+                  embeddings_b_log)).sum(dim=-1)
         return -kl_div
 
     @staticmethod
     def pearson_correlation(embeddings_a, embeddings_b):
         similarities = []
         for a in embeddings_a:
-            sim = [pearsonr(a.numpy(), b.numpy())[0] for b in embeddings_b]  # Move tensors to CPU first if using GPU
+            # Move tensors to CPU first if using GPU
+            sim = [pearsonr(a.numpy(), b.numpy())[0] for b in embeddings_b]
             similarities.append(sim)
         return torch.tensor(similarities)
-    
+
     # TODO: Make the ordering invariant of the postprocessing method (for now, default to raw)
     def postprocess(self, similarities):
         if self.postprocessing == "softmax":
@@ -91,4 +95,5 @@ class CustomSimilarity:
         elif self.postprocessing == "raw":
             return similarities
         else:
-            raise ValueError(f"Unknown postprocessing method: {self.postprocessing}")
+            raise ValueError(
+                f"Unknown postprocessing method: {self.postprocessing}")
