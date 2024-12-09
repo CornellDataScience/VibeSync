@@ -3,3 +3,6 @@ db:
 
 app:
 	uv run streamlit run backend/app.py
+
+scrape:
+	uv run backend/scrape.py

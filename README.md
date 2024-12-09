@@ -1,39 +1,25 @@
 # VibeSync
-
-## Getting Started
-
-Create a `.env` file in the root directory of the project and add the following environment variables (filled with valid credentials):
+## Environment
+To use our scraper, create a `.env` file in the root directory of the project and add the following environment variables (filled with valid credentials for [Jamendo](https://jamendo.com/)):
 ```
 CHROME_USER=<put your email here>
 CHROME_PASSWORD=<put your password here>
 ```
 
 ## Installation
-First, install python 3.11. Then download the following requirements.
-
+To install uv and create a virtual environemnt just run:
 ```shell
 pip install uv
+uv sync -p 3.11.5
 ```
-
+To start the virtual environment, run:
 ```shell
-uv pip install -r pyproject.toml
+source .venv/bin/activate
 ```
-
-Trying running `make db`
 
 ## Usage
+To run our scaper, run `make scraper`.
 
-To run `audio_classification.py`, simply run the following:
-
-```shell
-python audio_classification.py
-```
-
-To run `audio_caption.py`, simply run the following:
-
-```shell
-python audio_caption.py
-```
-
+To run our app, run `make app`.
 
 **Reference:** https://github.com/microsoft/CLAP

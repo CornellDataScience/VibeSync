@@ -129,3 +129,4 @@ cython_debug/
 .python-version
 .DS_Store
 vector_stores/
+*/temp_audio/*
