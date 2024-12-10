@@ -224,7 +224,7 @@ def download_song(track_id_list, download_wait_time=30, min_threads=0, max_threa
         driver.quit()
 
 
-def download_song_parallel(track_id_list, max_processes=10):
+def download_song_parallel(track_id_list, max_processes=1):
     with ThreadPoolExecutor(max_workers=max_processes) as executor:
         futures = []
         for i in range(0, max_processes):
