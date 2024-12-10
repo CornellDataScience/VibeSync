@@ -3,7 +3,7 @@ from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
 from langchain_community.vectorstores.faiss import DistanceStrategy
 from langchain_core.documents import Document
-
+import threading
 from embeddings import TextEmbeddings, AudioEmbeddings, AudioTextEmbeddings
 from embeddings import concat_embeddings, average_embeddings
 
@@ -25,6 +25,7 @@ class Database():
         self.text_embeddings = TextEmbeddings()
         self.audio_embeddings = AudioEmbeddings()
         self.audio_text_embeddings = AudioTextEmbeddings()
+        self.lock = threading.Lock()
 
         if os.path.isdir(self.path):
             self.db = FAISS.load_local(
@@ -80,15 +81,16 @@ class Database():
 
         ids = []
 
-        audio_ids = self.db.add_texts(files, audio_metadatas)
-        ids.extend(audio_ids)
+        with self.lock:
+            audio_ids = self.db.add_texts(files, audio_metadatas)
+            ids.extend(audio_ids)
 
-        if self.include_text_embeddings:
-            text_metadatas = [{**metadata, "doc_type": "text"}
-                              for metadata in metadatas]
+            if self.include_text_embeddings:
+                text_metadatas = [{**metadata, "doc_type": "text"}
+                                  for metadata in metadatas]
 
-            text_ids = self.db.add_texts(titles, text_metadatas)
-            ids.extend(text_ids)
+                text_ids = self.db.add_texts(titles, text_metadatas)
+                ids.extend(text_ids)
 
         print(f'Uploaded {len(audio_ids)} songs to database.')
 

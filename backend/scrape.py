@@ -20,12 +20,11 @@ from concurrent.futures import ProcessPoolExecutor
 
 INPUT_FILE = 'mtgdataset/data/autotagging.tsv'
 TRACKS, TAGS, EXTRA = read_file(INPUT_FILE)
-DB = Database('faiss_index', True)
+DB = Database('first_25_000', True)
 
 
 def download_and_post(download_dir, song_metadata,
                       download_suffix=".crdownload", wait_time=10, start_buffer=0):
-    print(f"Downloading {song_metadata['title']}!")
     # wait for download
     filename_prefix = song_metadata['title'].replace(" ", "_")
     filepath = None
@@ -65,19 +64,33 @@ def download_and_post(download_dir, song_metadata,
             return
 
     # post to DB
+    id = song_metadata['id']
+    track = TRACKS[id]
     song_object = Song(song_metadata['title'],
                        current_file, artist=song_metadata['artist'],
                        url=song_metadata['url'],
+                       id=id,
+                       genre=track['genre'],
+                       instrument=track['instrument'],
+                       moodtheme=track['mood/theme'],
                        description=song_metadata['description'])
+    # print(f"Title: {song_object.title}")
+    # print(f"Artist: {song_object.artist}")
+    # print(f"URL: {song_object.url}")
+    # print(f"ID: {song_object.id}")
+    # print(f"Genre: {song_object.genre}")
+    # print(f"Instrument: {song_object.instrument}")
+    # print(f"Mood/Theme: {song_object.moodtheme}")
+    # print(f"Description: {song_object.description}")
+
     DB.post_songs([song_object])
 
     # clean-up
     os.remove(current_file)
-    print(
-        f"Downloaded and posted {song_metadata['title']} in {t:.2f} sectionsfrom directory {current_file}!")
+    # print(f"Downloaded and posted {song_metadata['title']} in {t:.2f} sectionsfrom directory {current_file}!")
 
 
-def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threads=3):
+def download_song(track_id_list, download_wait_time=30, min_threads=0, max_threads=2, process=1):
     download_dir = os.path.abspath("backend/temp_audio")
     if not os.path.exists(download_dir):
         os.makedirs(download_dir)
@@ -92,7 +105,6 @@ def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threa
     }
     chrome_options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(options=chrome_options)
-    start_time = time.time()
 
     try:
         driver.get("https://www.jamendo.com/start")
@@ -103,10 +115,14 @@ def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threa
         login_button.click()
 
         # Wait for the login window to appear
-        WebDriverWait(driver, 4).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//input[@name='email']"))
-        )
+        try:
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//input[@name='email']"))
+            )
+        except Exception as e:
+            print("Failed to load login page")
+            return
 
         # Find the email and password fields, find the log in button
         email_field = driver.find_element(By.XPATH, "//input[@name='email']")
@@ -116,13 +132,14 @@ def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threa
             By.XPATH, "//button[contains(text(), 'Log in')]")
 
         # Load environment variables from .env file
+        process_suffix = f"_{process}" if process > 1 else ""
         load_dotenv(override=True)
-        CHROME_USER = os.getenv("CHROME_USER")
-        CHROME_PASSWORD = os.getenv("CHROME_PASSWORD")
+        email = os.getenv("CHROME_USER"+process_suffix)
+        password = os.getenv("CHROME_PASSWORD"+process_suffix)
 
         # Enter your log-in info
-        email_field.send_keys(CHROME_USER)
-        password_field.send_keys(CHROME_PASSWORD)
+        email_field.send_keys(email)
+        password_field.send_keys(password)
 
         # Locate the log-in button
         submit_button = driver.find_element(
@@ -132,7 +149,7 @@ def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threa
         driver.execute_script("arguments[0].click();", submit_button)
 
         # Wait a bit to make sure that you are logged in
-        time.sleep(0.2)
+        time.sleep(1)
         # print("Login completed!")
         # print("Logged in successfully!")
         with ThreadPoolExecutor(max_workers=max_threads) as executor:
@@ -145,10 +162,14 @@ def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threa
 
                 # Wait for the Download button to load
                 # print("Waiting for the Download button")
-                download_button = WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable(
-                        (By.CLASS_NAME, "js-abtesting-trigger-start"))
-                )
+                download_button = None
+                try:
+                    download_button = WebDriverWait(driver, 1).until(
+                        EC.element_to_be_clickable(
+                            (By.CLASS_NAME, "js-abtesting-trigger-start"))
+                    )
+                except Exception as e:
+                    continue
 
                 # Click the Download button
                 # print("Clicking the download button")
@@ -164,10 +185,13 @@ def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threa
                 artist = artist_name_element.text
 
                 # Wait for the download button to load
-                download_button = WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable(
-                        (By.CLASS_NAME, "js-overlay-download"))
-                )
+                try:
+                    download_button = WebDriverWait(driver, 0.2).until(
+                        EC.element_to_be_clickable(
+                            (By.CLASS_NAME, "js-overlay-download"))
+                    )
+                except Exception as e:
+                    continue
 
                 # Click the Free Download button
                 download_button.click()
@@ -177,6 +201,7 @@ def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threa
                     "title": song_title,
                     "artist": artist,
                     "url": url,
+                    "id": id,
                     "description": ""
                 }
                 # add download thread
@@ -189,9 +214,6 @@ def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threa
 
         # Next step: Format download into song objects!
         # Push the song object to the database!
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-        print(elapsed_time)
         DB.save_db()
 
     except Exception as e:
@@ -200,14 +222,27 @@ def download_song(track_id_list, download_wait_time=30, min_threads=2, max_threa
 
     finally:
         driver.quit()
-        
+
+
+def download_song_parallel(track_id_list, max_processes=10):
+    with ThreadPoolExecutor(max_workers=max_processes) as executor:
+        futures = []
+        for i in range(0, max_processes):
+            start = (i*len(track_id_list))//max_processes
+            end = ((i+1)*len(track_id_list))//max_processes
+            futures.append(executor.submit(
+                download_song, track_id_list[start:end], process=i+1))
+        for future in futures:
+            future.result()
+
+
 if __name__ == "__main__":
     track_ids = list(TRACKS.keys())
-
-    one_track_id = [track_ids[0]]
-    first_track = TRACKS[one_track_id[0]]
-
-    track_id_list = track_ids[:100]
+    track_id_list = track_ids[:30_000]
 
     # Run the download_song feature using this function
-    download_song(track_id_list)
+    start_time = time.time()
+    download_song_parallel(track_id_list)
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"Elapsed_time: {elapsed_time/60:.2f} minutes")
