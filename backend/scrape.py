@@ -20,7 +20,7 @@ from concurrent.futures import ProcessPoolExecutor
 
 INPUT_FILE = 'mtgdataset/data/autotagging.tsv'
 TRACKS, TAGS, EXTRA = read_file(INPUT_FILE)
-DB = Database('first_31_200', True)
+DB = Database('first_32_000', True)
 
 
 def download_and_post(download_dir, song_metadata,
@@ -70,7 +70,8 @@ def download_and_post(download_dir, song_metadata,
                        current_file, artist=song_metadata['artist'],
                        url=song_metadata['url'],
                        id=id,
-                       genre=track['genre'],
+                       genre=track['genre']
+                       duration=track['duration'],
                        instrument=track['instrument'],
                        moodtheme=track['mood/theme'],
                        description=song_metadata['description'])
@@ -224,7 +225,7 @@ def download_song(track_id_list, download_wait_time=30, min_threads=0, max_threa
         driver.quit()
 
 
-def download_song_parallel(track_id_list, max_processes=1):
+def download_song_parallel(track_id_list, max_processes=10):
     with ThreadPoolExecutor(max_workers=max_processes) as executor:
         futures = []
         for i in range(0, max_processes):
@@ -238,7 +239,7 @@ def download_song_parallel(track_id_list, max_processes=1):
 
 if __name__ == "__main__":
     track_ids = list(TRACKS.keys())
-    track_id_list = track_ids[31_100:31_200]
+    track_id_list = track_ids[31_200:32_000]
 
     # Run the download_song feature using this function
     start_time = time.time()

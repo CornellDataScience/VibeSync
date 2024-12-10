@@ -3,6 +3,11 @@ from songs import Song
 from database import Database
 import os
 
+# Initialize database
+if 'db' not in st.session_state:
+    st.session_state.db = Database(
+        'first_32_000', include_text_embeddings=True)
+
 
 def main():
     st.title("Music Playlist Generator")
@@ -20,10 +25,14 @@ def main():
         if st.button("Get Playlist"):
             if playlist_name:
                 try:
-                    playlist = db.get_playlist(playlist_name, k)
+                    playlist = st.session_state.db.get_playlist(
+                        playlist_name, k)
                     st.write(f"Songs in '{playlist_name}':")
                     for song, score in playlist:
-                        st.write(f"- {song.page_content} (Score: {score:.2f})")
+                        metadata = song.metadata
+                        print(metadata)
+                        st.write(
+                            f"- [{metadata['artist']} - {song.page_content}]({metadata['url']}) (Score: {score:.2f}) ")
                 except Exception as e:
                     st.error(f"Error retrieving playlist: {e}")
             else:
@@ -53,7 +62,7 @@ def main():
 
             if songs:
                 try:
-                    db.post_songs(songs)
+                    st.session_state.db.post_songs(songs)
                     st.success(f"Uploaded {len(songs)} songs successfully!")
 
                     # Clean up temporary files
@@ -64,7 +73,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # Initialize database
-    db = Database('faiss_index', include_text_embeddings=False)
-
     main()
