@@ -31,7 +31,8 @@ class Database():
             self.db = FAISS.load_local(
                 self.path, self.text_embeddings, allow_dangerous_deserialization=True)
 
-            print(f'Loaded db from {self.path}.')
+            print(
+                f'Loaded db from {self.path} with {self.db.index.ntotal} entries.')
             return
 
         index = faiss.IndexFlatIP(
