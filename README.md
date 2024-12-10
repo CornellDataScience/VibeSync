@@ -7,7 +7,7 @@ CHROME_PASSWORD=<put your password here>
 ```
 
 ## Installation
-To install uv and create a virtual environemnt just run:
+To install uv and create a virtual environment just run:
 ```shell
 pip install uv
 uv sync -p 3.11.5
