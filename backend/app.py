@@ -3,11 +3,6 @@ from songs import Song, MetaSet
 from database import Database
 import os
 
-# Initialize database
-if 'db' not in st.session_state:
-    st.session_state.db = Database(
-        'first_100', include_all_embeddings=True)
-
 genres = [
     "alternative", "ambient", "atmospheric", "chillout", "classical",
     "dance", "downtempo", "easylistening", "electronic", "experimental",
@@ -36,13 +31,13 @@ moods_themes = [
 ]
 
 
-def main():
+def main(db):
     st.title("Vibesync's Playlist Generator 🎵")
 
-    playlist()
+    playlist(db)
 
 
-def playlist():
+def playlist(db):
     st.subheader("Retrieve Playlist")
 
     playlist_name = st.text_input("Enter Playlist Name")
@@ -75,7 +70,7 @@ def playlist():
                     filter['moodtheme'] = MetaSet(set(selected_moods))
                 print("Filter:", filter)
                 # request playlist
-                playlist = st.session_state.db.get_playlist(
+                playlist = db.get_playlist(
                     playlist_name, k, filter=filter)
 
                 # show results
@@ -119,5 +114,11 @@ def pretty_print_audio_metadata(metadata):
         print(f"{key.capitalize():<15}: {value}")
 
 
+@st.cache_resource
+def load_database(name):
+    return Database(name, include_all_embeddings=True)
+
+
 if __name__ == "__main__":
-    main()
+    db = load_database('full_jamendo')
+    main(db)
