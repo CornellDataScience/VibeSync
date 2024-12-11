@@ -20,7 +20,7 @@ from concurrent.futures import ProcessPoolExecutor
 
 INPUT_FILE = 'mtgdataset/data/autotagging.tsv'
 TRACKS, TAGS, EXTRA = read_file(INPUT_FILE)
-DB = Database('first_32_000', True)
+DB = Database('first_100', True)
 
 
 def download_and_post(download_dir, song_metadata,
@@ -67,22 +67,13 @@ def download_and_post(download_dir, song_metadata,
     id = song_metadata['id']
     track = TRACKS[id]
     song_object = Song(song_metadata['title'],
-                       current_file, artist=song_metadata['artist'],
+                       current_file, str(id), artist=song_metadata['artist'],
                        url=song_metadata['url'],
-                       id=id,
-                       genre=track['genre']
+                       genre=track['genre'],
                        duration=track['duration'],
                        instrument=track['instrument'],
                        moodtheme=track['mood/theme'],
                        description=song_metadata['description'])
-    # print(f"Title: {song_object.title}")
-    # print(f"Artist: {song_object.artist}")
-    # print(f"URL: {song_object.url}")
-    # print(f"ID: {song_object.id}")
-    # print(f"Genre: {song_object.genre}")
-    # print(f"Instrument: {song_object.instrument}")
-    # print(f"Mood/Theme: {song_object.moodtheme}")
-    # print(f"Description: {song_object.description}")
 
     DB.post_songs([song_object])
 
@@ -239,11 +230,11 @@ def download_song_parallel(track_id_list, max_processes=10):
 
 if __name__ == "__main__":
     track_ids = list(TRACKS.keys())
-    track_id_list = track_ids[31_200:32_000]
+    track_id_list = track_ids[40_000:40_100]
 
     # Run the download_song feature using this function
     start_time = time.time()
-    download_song_parallel(track_id_list)
+    download_song_parallel(track_id_list, max_processes=10)
     end_time = time.time()
     elapsed_time = end_time - start_time
     print(f"Elapsed_time: {elapsed_time/60:.2f} minutes")
