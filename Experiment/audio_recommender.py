@@ -1,7 +1,7 @@
 import os
 from msclap import CLAP
 from custom_similarity import CustomSimilarity
-from utility import *
+from Experiment.utility import *
 
 
 def main():
@@ -30,14 +30,16 @@ def main():
 
     # Validate configuration
     if len(text_queries) > 1 and len(similarity_methods) > 1:
-        raise ValueError("Configuration error: Provide either multiple text queries or multiple compute methods, not both.")
+        raise ValueError(
+            "Configuration error: Provide either multiple text queries or multiple compute methods, not both.")
 
     # Initialize CLAP model
     clap_model = CLAP(version="2023", use_cuda=False)
 
     # Compute audio embeddings
     print("Computing audio embeddings...")
-    audio_embeddings = clap_model.get_audio_embeddings(audio_files, resample=False)
+    audio_embeddings = clap_model.get_audio_embeddings(
+        audio_files, resample=False)
     print("Audio embeddings complete!")
 
     # Prepare output handling
@@ -60,8 +62,10 @@ def main():
         text_embedding = clap_model.get_text_embeddings([query])
 
         for similarity_method in similarity_methods:
-            similarity_computer = CustomSimilarity(method=similarity_method, postprocessing=postprocessing_method)
-            custom_similarities = similarity_computer.compute_similarity(audio_embeddings, text_embedding)
+            similarity_computer = CustomSimilarity(
+                method=similarity_method, postprocessing=postprocessing_method)
+            custom_similarities = similarity_computer.compute_similarity(
+                audio_embeddings, text_embedding)
 
             custom_values, custom_indices = custom_similarities.squeeze().topk(k)
 
@@ -73,14 +77,17 @@ def main():
                 for i, index in enumerate(custom_indices):
                     song = format_audio_name(audio_files[index])
                     score = custom_values[i].item()
-                    output_file.write(f"  {i + 1}. {song} (Similarity: {score:.2f})\n")
+                    output_file.write(
+                        f"  {i + 1}. {song} (Similarity: {score:.2f})\n")
                 output_file.write("\n")
             else:
-                pretty_print_similarity_results(audio_files, custom_indices, custom_values, query, k, similarity_method)
+                pretty_print_similarity_results(
+                    audio_files, custom_indices, custom_values, query, k, similarity_method)
 
         # Include original compute similarity if flag is set
         if include_original:
-            original_similarities = clap_model.compute_similarity(audio_embeddings, text_embedding)
+            original_similarities = clap_model.compute_similarity(
+                audio_embeddings, text_embedding)
 
             original_values, original_indices = original_similarities.squeeze().topk(k)
 
@@ -91,10 +98,12 @@ def main():
                 for i, index in enumerate(original_indices):
                     song = format_audio_name(audio_files[index])
                     score = original_values[i].item()
-                    output_file.write(f"  {i + 1}. {song} (Similarity: {score:.2f})\n")
+                    output_file.write(
+                        f"  {i + 1}. {song} (Similarity: {score:.2f})\n")
                 output_file.write("\n")
             else:
-                pretty_print_similarity_results(audio_files, original_indices, original_values, query, k, "Original Compute Similarity")
+                pretty_print_similarity_results(
+                    audio_files, original_indices, original_values, query, k, "Original Compute Similarity")
 
     print("Generation complete!")
     if output_file:

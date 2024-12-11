@@ -230,11 +230,13 @@ def download_song_parallel(track_id_list, max_processes=10):
 
 if __name__ == "__main__":
     track_ids = list(TRACKS.keys())
-    track_id_list = track_ids[40_000:40_100]
+    track_id_list = track_ids[0:100]
 
     # Run the download_song feature using this function
     start_time = time.time()
+
     download_song_parallel(track_id_list, max_processes=10)
+
     end_time = time.time()
     elapsed_time = end_time - start_time
     print(f"Elapsed_time: {elapsed_time/60:.2f} minutes")

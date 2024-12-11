@@ -106,10 +106,12 @@ class Database():
 
     def get_playlist(self, title: str, k: int = 3, filter: dict = None) -> list[tuple[Document, float]]:
         """Retrieve k-nearest songs from FAISS database."""
+        print(f"Filtering by {filter}")
         songs_and_scores = self.db.similarity_search_with_relevance_scores(
             title, k, fetch_k=self.db.index.ntotal, filter=filter)
 
-        print(f'Retrieved playlist of name {title}.')
+        print(
+            f'Retrieved playlist of name {title} of size {len(songs_and_scores)}.')
 
         return songs_and_scores
 
@@ -124,34 +126,43 @@ class Database():
 if __name__ == '__main__':
     # Example workflow
 
-    db = Database('faiss_index', True)
-    folder_path = 'audio'
-    if not os.path.isdir(folder_path):
-        raise ValueError(f"The path '{folder_path}' is not a valid directory.")
+    db = Database('first_100', True)
 
-    songs = []
-    genre1 = {"rOck", "edm"}
-    genre2 = {"eMo", "HaPPY"}
-    for root, _, filenames in os.walk(folder_path):
-        for i, filename in enumerate(filenames):
-            if filename.lower().endswith(".mp3"):
-                path = os.path.join(root, filename)
-                title = os.path.splitext(filename)[0].lower().replace('_', " ")
+    print(db.db.index.ntotal)
 
-                if i % 2 == 0:
-                    songs.append(Song(title, path, id=str(
-                        i), genre=genre1))
-                if i % 2 == 1:
-                    songs.append(Song(title, path, id=str(
-                        i), genre=genre2))
-                print((title, path))
+    # folder_path = 'audio'
+    # if not os.path.isdir(folder_path):
+    #     raise ValueError(f"The path '{folder_path}' is not a valid directory.")
 
-    db.post_songs(songs)
+    # songs = []
+    # genre1 = {"rOck", "edm"}
+    # genre2 = {"eMo", "HaPPY"}
+    # for root, _, filenames in os.walk(folder_path):
+    #     for i, filename in enumerate(filenames):
+    #         if filename.lower().endswith(".mp3"):
+    #             path = os.path.join(root, filename)
+    #             title = os.path.splitext(filename)[0].lower().replace('_', " ")
+
+    #             if i % 2 == 0:
+    #                 songs.append(Song(title, path, id=str(
+    #                     i), genre=genre1))
+    #             if i % 2 == 1:
+    #                 songs.append(Song(title, path, id=str(
+    #                     i), genre=genre2))
+    #             print((title, path))
+
+    # db.post_songs(songs)
 
     playlist_title = "classical instruments"
 
     playlist = db.get_playlist(playlist_title, k=3, filter={
-                               'genre': MetaSet({'emo'}), 'doc_type': "audio"})
+                               'genre': MetaSet({'pop'}), 'doc_type': "audio"})
+    print(playlist)
+
+    playlist_title = "classical instruments"
+
+    playlist = db.get_playlist(playlist_title, k=3, filter={
+                               'genre': MetaSet({'rock'}), 'doc_type': "audio"})
     print(playlist)
 
     # db.save_db()
