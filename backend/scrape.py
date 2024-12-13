@@ -76,7 +76,7 @@ def download_and_post(download_dir, song_metadata,
 
 
 def download_song(track_id_list, download_wait_time=30, min_threads=1, max_threads=2, process=1):
-    download_dir = os.path.abspath(f"backend/temp_audio/{process}")
+    download_dir = os.path.abspath(f"backend/audio/{process}")
     if not os.path.exists(download_dir):
         os.makedirs(download_dir)
     caps = DesiredCapabilities.CHROME

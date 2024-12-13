@@ -127,10 +127,7 @@ if __name__ == '__main__':
     # Example workflow
 
     db = Database('first_100', True)
-
-    print(db.db.index.ntotal)
-
-    # folder_path = 'audio'
+    # folder_path = 'backend/audio/popular_songs'
     # if not os.path.isdir(folder_path):
     #     raise ValueError(f"The path '{folder_path}' is not a valid directory.")
 
