@@ -128,5 +128,5 @@ cython_debug/
 # Miscellaneous
 .python-version
 .DS_Store
-vector_stores/
-*/temp_audio/*
+*/vector_stores/
+*/audio/

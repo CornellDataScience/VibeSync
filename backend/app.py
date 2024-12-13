@@ -1,7 +1,8 @@
 import streamlit as st
-from songs import Song, MetaSet
+from songs import MetaSet
 from database import Database
 import os
+import gdown
 
 genres = [
     "alternative", "ambient", "atmospheric", "chillout", "classical",
@@ -111,5 +112,9 @@ def load_database(name):
 
 
 if __name__ == "__main__":
+    if not os.path.exists("backend/vector_stores/full_jamendo"):
+        url = "https://drive.google.com/drive/folders/1TOF89l81ZW17raWxKRlPyW8WAWAPx0wJ?usp=sharing"
+        gdown.download_folder(
+            url, quiet=False, use_cookies=False, output="backend/vector_stores/full_jamendo")
     db = load_database('full_jamendo')
     main(db)

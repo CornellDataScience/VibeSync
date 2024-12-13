@@ -18,7 +18,6 @@ from concurrent.futures import ThreadPoolExecutor
 from numpy import random
 random.seed(42)
 TRACKS, TAGS, EXTRA = read_file('mtgdataset/data/autotagging.tsv')
-DB = Database(f'full_jamendo', True)
 
 
 def download_and_post(download_dir, song_metadata,
@@ -76,7 +75,7 @@ def download_and_post(download_dir, song_metadata,
 
 
 def download_song(track_id_list, download_wait_time=30, min_threads=1, max_threads=2, process=1):
-    download_dir = os.path.abspath(f"backend/temp_audio/{process}")
+    download_dir = os.path.abspath(f"backend/audio/{process}")
     if not os.path.exists(download_dir):
         os.makedirs(download_dir)
     caps = DesiredCapabilities.CHROME
@@ -223,7 +222,7 @@ def download_song_parallel(track_id_list, max_processes=10):
     DB.save_db()
 
 
-def main(processes=4, batches=2, max_songs=1000):
+def main(processes=2, batches=4, max_songs=100):
     if max_songs is not None:  # randomly select a subset of the tracks
         track_id_list = random.choice(
             list(TRACKS.keys()), max_songs, replace=False)
@@ -243,4 +242,5 @@ def main(processes=4, batches=2, max_songs=1000):
 
 
 if __name__ == "__main__":
+    DB = Database(f'scrape_test', True)
     main()
