@@ -16,18 +16,15 @@ import os
 from collections import deque
 from concurrent.futures import ThreadPoolExecutor
 from numpy import random
-
-INPUT_FILE = 'mtgdataset/data/autotagging.tsv'
-TRACKS, TAGS, EXTRA = read_file(INPUT_FILE)
-DB = Database('full_jamendo', True)
+random.seed(42)
+TRACKS, TAGS, EXTRA = read_file('mtgdataset/data/autotagging.tsv')
+DB = Database(f'full_jamendo', True)
 
 
 def download_and_post(download_dir, song_metadata,
                       download_suffix=".crdownload", wait_time=10, start_buffer=0.5):
     # wait for download
     filename_prefix = song_metadata['title'].replace(" ", "_")
-    filepath = None
-
     t = 0
     time.sleep(start_buffer)
 
@@ -76,7 +73,6 @@ def download_and_post(download_dir, song_metadata,
     DB.post_songs([song_object])
     if os.path.exists(current_file):
         os.remove(current_file)
-    # print(f"Downloaded and posted {song_metadata['title']} in {t:.2f} sectionsfrom directory {current_file}!")
 
 
 def download_song(track_id_list, download_wait_time=30, min_threads=1, max_threads=2, process=1):
@@ -201,17 +197,17 @@ def download_song(track_id_list, download_wait_time=30, min_threads=1, max_threa
                 if len(futures) >= max_threads:
                     while len(futures) > min_threads:
                         futures.popleft().result()
-        driver.quit()
     except Exception as e:
         print(f"An error occurred: {e}")
         traceback.print_exc()
-        driver.quit()
-        move_on = random.randint(0, 1)
+
         download_song(track_id_list[idx+1:], download_wait_time=download_wait_time,
                       min_threads=min_threads, max_threads=max_threads, process=process)
     finally:
+        driver.quit()
         for file in os.listdir(download_dir):
             os.remove(os.path.join(download_dir, file))
+        os.rmdir(download_dir)
 
 
 def download_song_parallel(track_id_list, max_processes=10):
@@ -227,18 +223,24 @@ def download_song_parallel(track_id_list, max_processes=10):
     DB.save_db()
 
 
-if __name__ == "__main__":
-    track_ids = list(TRACKS.keys())
-    track_id_list = track_ids
+def main(processes=4, batches=2, max_songs=1000):
+    if max_songs is not None:  # randomly select a subset of the tracks
+        track_id_list = random.choice(
+            list(TRACKS.keys()), max_songs, replace=False)
+    else:
+        track_id_list = list(TRACKS.keys())
 
     # Run the download_song feature using this function
     start_time = time.time()
-    batches = 100
-    for i in range(15, batches):
+    for i in range(batches):
+        print(f"...Downloading batch {i+1} of {batches}...")
         start = (i*len(track_id_list))//batches
         end = ((i+1)*len(track_id_list))//batches
-        download_song_parallel(track_id_list[start:end], max_processes=16)
-
-    end_time = time.time()
-    elapsed_time = end_time - start_time
+        download_song_parallel(
+            track_id_list[start:end], max_processes=processes)
+    elapsed_time = time.time() - start_time
     print(f"Elapsed_time: {elapsed_time/60:.2f} minutes")
+
+
+if __name__ == "__main__":
+    main()

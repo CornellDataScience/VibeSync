@@ -19,20 +19,12 @@ instruments = [
 ]
 
 moods_themes = [
-    "happy", "energetic", "relaxing", "film", "dark", "epic", "melodic",
-    "inspiring", "emotional", "dream", "love", "uplifting", "deep",
-    "soundscape", "background", "positive", "sad", "meditative",
-    "motivational", "christmas", "advertising", "romantic", "space",
-    "corporate", "documentary", "action", "slow", "calm", "adventure",
-    "summer", "drama", "melancholic", "fun", "upbeat", "soft", "movie",
-    "sport", "dramatic", "ballad", "commercial", "cool", "game",
-    "trailer", "children", "retro", "hopeful", "nature", "party", "funny",
-    "powerful", "heavy", "holiday", "travel", "groovy", "fast", "sexy"
+    "emotional", "energetic", "film", "happy", "relaxing"
 ]
 
 
 def main(db):
-    st.title("Vibesync's Playlist Generator 🎵")
+    st.title("Vibes! VibeSync's Playlist Generator 🎵")
 
     playlist(db)
 
@@ -68,17 +60,16 @@ def playlist(db):
                     filter['instrument'] = MetaSet(set(selected_instruments))
                 if len(selected_moods) > 0:
                     filter['moodtheme'] = MetaSet(set(selected_moods))
-                print("Filter:", filter)
                 # request playlist
                 playlist = db.get_playlist(
                     playlist_name, k, filter=filter)
 
                 # show results
                 st.write(f"Songs in '{playlist_name}':")
-                print(f"Retrieved {len(playlist)} songs!")
+                # print(f"Retrieved {len(playlist)} songs!")
                 for song, score in playlist:
                     metadata = song.metadata
-                    pretty_print_audio_metadata(metadata)
+                    # pretty_print_audio_metadata(metadata)
                     display_song(metadata, score)
                     # st.write(
                     # f"- [{metadata['artist']} - {metadata['title']}]({metadata['url']})\n (Score: {score:.2f}) - {metadata['doc_type']}")

@@ -10,11 +10,11 @@ class TextEmbeddings(Embeddings):
         self.model = CLAP(version='2023', use_cuda=False)
 
     def embed_documents(self, texts: list[str]) -> list[list[float]]:
-        print("Added Text Embedding")
+        # print("Added Text Embedding")
         return self.model.get_text_embeddings(texts).tolist()
 
     def embed_query(self, query: str) -> list[float]:
-        print("Added Text Embedding")
+        # print("Added Text Embedding")
         return self.model.get_text_embeddings([query])[0].tolist()
 
 
@@ -24,11 +24,11 @@ class AudioEmbeddings(Embeddings):
         self.model = CLAP(version='2023', use_cuda=False)
 
     def embed_documents(self, files: list[str]) -> list[list[float]]:
-        print("Added Audio Embedding")
+        # print("Added Audio Embedding")
         return self.model.get_audio_embeddings(files, resample=True).tolist()
 
     def embed_query(self, file: str) -> list[float]:
-        print("Added Audio Embedding")
+        # print("Added Audio Embedding")
         return self.model.get_audio_embeddings([file], resample=True)[0].tolist()
 
 
@@ -42,7 +42,7 @@ class AudioTextEmbeddings(Embeddings):
         for doc in docs:
             if not doc.lower().strip().endswith('.mp3'):
                 res.append(self.model.get_text_embeddings([doc])[0])
-                print("Added Text Embedding")
+                # print("Added Text Embedding")
                 continue
 
             if not os.path.isfile(doc):
@@ -51,20 +51,20 @@ class AudioTextEmbeddings(Embeddings):
 
             res.append(self.model.get_audio_embeddings(
                 [doc], resample=True)[0])
-            print("Added Audio Embedding")
+            # print("Added Audio Embedding")
 
         return res
 
     def embed_query(self, query: str) -> list[float]:
         if not query.lower().strip().endswith('.mp3'):
-            print("Added Text Embedding")
+            # print("Added Text Embedding")
             return self.model.get_text_embeddings([query])[0].tolist()
 
         if not os.path.isfile(query):
             print(f'{query} does not exists!')
             return
 
-        print("Added Audio Embedding")
+        # print("Added Audio Embedding")
         return self.model.get_audio_embeddings([query], resample=True)[0].tolist()
 
 
