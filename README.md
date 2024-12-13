@@ -14,7 +14,9 @@ To start the virtual environment, run:
 ```shell
 source .venv/bin/activate
 ```
-## Environment
+## Setup for app
+Download the "full_jamendo" database of 30,000+ songs from [here](https://drive.google.com/drive/folders/1ATPK2n8DiLieLHniOs2lOHIpjThFxhnb?usp=drive_link) and store it in the directory `VibeSync/vector_stores/full_jamendo`.
+## Setup for scraper
 To use our scraper, create a `.env` file in the root directory of the project and add the following environment variables (filled with valid credentials for [Jamendo](https://jamendo.com/)):
 ```
 CHROME_USER=<put your email here>
@@ -23,14 +25,12 @@ CHROME_USER_2=<put your email here>
 CHROME_PASSWORD_2=<put your password here>
 ```
 Add more users as is needed.
-
 ## Usage
 To run our app, run `make app`.
 
 To run our scaper, run `make scrape`.
 
 To run our database testing, run `make db`.
-
 ## Who we are
 VibeSync was made possible by Michael Ngo, Nancy Chen, Koji Kimura, Samantha Vaca, and Takuma Osaka.
 
