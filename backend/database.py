@@ -17,7 +17,7 @@ import os
 class Database():
 
     def __init__(self, path: str, include_all_embeddings: bool = True):
-        self.path = os.path.join('vector_stores', path)
+        self.path = os.path.join('backend/vector_stores', path)
 
         self.include_all_embeddings = include_all_embeddings
 
@@ -127,28 +127,29 @@ if __name__ == '__main__':
     # Example workflow
 
     db = Database('first_100', True)
-    # folder_path = 'backend/audio/popular_songs'
-    # if not os.path.isdir(folder_path):
-    #     raise ValueError(f"The path '{folder_path}' is not a valid directory.")
+    folder_path = 'backend/audio/popular_songs'
+    if not os.path.isdir(folder_path):
+        raise ValueError(f"The path '{folder_path}' is not a valid directory.")
 
-    # songs = []
-    # genre1 = {"rOck", "edm"}
-    # genre2 = {"eMo", "HaPPY"}
-    # for root, _, filenames in os.walk(folder_path):
-    #     for i, filename in enumerate(filenames):
-    #         if filename.lower().endswith(".mp3"):
-    #             path = os.path.join(root, filename)
-    #             title = os.path.splitext(filename)[0].lower().replace('_', " ")
+    songs = []
+    genre1 = {"rOck", "edm"}
+    genre2 = {"eMo", "HaPPY"}
+    for root, _, filenames in os.walk(folder_path):
+        for i, filename in enumerate(filenames):
+            if filename.lower().endswith(".mp3"):
+                path = os.path.join(root, filename)
+                title = os.path.splitext(filename)[0].lower().replace('_', " ")
 
-    #             if i % 2 == 0:
-    #                 songs.append(Song(title, path, id=str(
-    #                     i), genre=genre1))
-    #             if i % 2 == 1:
-    #                 songs.append(Song(title, path, id=str(
-    #                     i), genre=genre2))
-    #             print((title, path))
+                if i % 2 == 0:
+                    songs.append(Song(title, path, id=str(
+                        i), genre=genre1))
+                if i % 2 == 1:
+                    songs.append(Song(title, path, id=str(
+                        i), genre=genre2))
+                print((title, path))
 
-    # db.post_songs(songs)
+    db.post_songs(songs)
+    db.save_db()
 
     playlist_title = "classical instruments"
 
