@@ -4,24 +4,14 @@ from database import Database
 import os
 import gdown
 
-genres = [
-    "alternative", "ambient", "atmospheric", "chillout", "classical",
-    "dance", "downtempo", "easylistening", "electronic", "experimental",
-    "folk", "funk", "hiphop", "house", "indie", "instrumentalpop",
-    "jazz", "lounge", "metal", "newage", "orchestral", "pop",
-    "popfolk", "poprock", "reggae", "rock", "soundtrack", "techno",
-    "trance", "triphop", "world"
-]
+genres = ["electronic", "rock", "pop", "ambient", "soundtrack", "alternative", "experimental",     "easylistening", "classical", "dance", "chillout", "jazz", "poprock", "indie", "world",     "folk", "techno", "hiphop", "lounge", "house", "funk", "orchestral", "popfolk",     "atmospheric", "trance", "instrumentalpop", "newage", "blues", "metal", "progressive",     "electropop", "triphop", "reggae", "downtempo", "minimal", "rap", "rnb", "punkrock",     "psychedelic", "instrumentalrock", "industrial", "latin", "dubstep", "drumnbass",     "ethno", "fusion", "club",
+          "symphonic", "country", "electronica", "disco",     "singersongwriter", "darkambient", "breakbeat", "soul", "synthpop", "dub", "hardrock",     "rocknroll", "80s", "contemporary", "eurodance", "grunge", "improvisation", "postrock",     "groove", "90s", "alternativerock", "deephouse", "celtic", "jazzfunk", "idm", "bossanova",     "darkwave", "swing", "70s", "acidjazz", "classicrock", "newwave", "oriental", "hard",     "chanson", "ethnicrock", "jazzfusion", "60s", "choir", "edm", "ska", "gothic",     "worldfusion", "bluesrock", "heavymetal", "medieval", "tribal", "african"]
 
-instruments = [
-    "acousticguitar", "bass", "computer", "drummachine", "drums",
-    "electricguitar", "electricpiano", "guitar", "keyboard", "piano",
-    "strings", "synthesizer", "violin", "voice"
-]
+instruments = ["piano", "synthesizer", "bass", "drums", "guitar", "electricguitar",     "acousticguitar", "violin", "voice", "computer", "keyboard", "strings",     "drummachine", "flute", "electricpiano", "cello", "saxophone", "trumpet",     "percussion",
+               "sampler", "orchestra", "beat", "classicalguitar", "bell",     "doublebass", "accordion", "harp", "viola", "horn", "rhodes", "pipeorgan",     "brass", "acousticbassguitar", "organ", "clarinet", "trombone", "harmonica",     "pad", "ukulele", "bongo", "oboe"]
 
-moods_themes = [
-    "emotional", "energetic", "film", "happy", "relaxing"
-]
+moods_themes = ["love", "happy", "energetic", "dark", "relaxing", "melodic", "sad", "dream",     "film", "emotional", "epic", "romantic", "melancholic", "space", "meditative",     "uplifting", "ballad", "inspiring", "calm", "soft", "slow", "fun", "christmas",     "motivational", "positive", "upbeat", "dramatic", "deep", "children",
+                "adventure",     "soundscape", "summer", "powerful", "hopeful", "advertising", "party", "background",     "action", "movie", "drama", "nature", "cool", "funny", "documentary", "horror",     "fast", "ambiental", "groovy", "corporate", "commercial", "travel", "sport",     "mellow", "retro", "game", "sexy", "trailer", "heavy", "holiday"]
 
 
 def main(db):
